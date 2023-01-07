@@ -25,7 +25,7 @@ api.reset_conversation()
 api.clear_conversations()
 api.refresh_chat_page()
 response_string = resp["message"] #pulls response string from resp dictionary
-print(resp)
+print(response_string)
 
 #converts chatGPT response string with pyttsx3 module to text-to-speech as an mp3 file
 engine = pyttsx3.init()
