@@ -1,0 +1,3 @@
+Images go in this directory
+NOTE: this script is set up for png extensions only
+They will be separated in sync with the length of audio
