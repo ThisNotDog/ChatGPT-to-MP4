@@ -8,10 +8,15 @@ from PIL import Image
 from pathlib import Path
 from moviepy import editor
 
-#uses pyChatGPT module to retrieve a ChatGPT response string
+#global variables that need to be configured
 session_token = "[get from ChatGPT session token element]"
 video_name = "[name of video]"
 prompt = "[prompt for ChatGPT to respond to]"
+folder_path = r"[base path for temp files]"
+audio_path = r"[path for mp3]"
+video_path_name = r"[path for mp4]" + f"\{video_name}.mp4" 
+
+#uses pyChatGPT module to retrieve a ChatGPT response string
 api = ChatGPT(session_token,
               conversation_id="[conversation id for ChatGPT element]",
               auth_type="[service used to authenticate]", #google, openai
@@ -20,17 +25,6 @@ api = ChatGPT(session_token,
               moderation=False,
               window_size=(1024, 768),
               verbose=True)
-resp = api.send_message(prompt) #pulls data from response into a dictionary
-api.reset_conversation()
-api.clear_conversations()
-api.refresh_chat_page()
-response_string = resp["message"] #pulls response string from resp dictionary
-print(response_string)
-
-#converts chatGPT response string with pyttsx3 module to text-to-speech as an mp3 file
-engine = pyttsx3.init()
-engine.save_to_file(response_string, f"{video_name}.mp3")
-engine.runAndWait()
 
 # #class for converting mp3 to mp4
 class MP3ToMP4:
@@ -77,8 +71,18 @@ class MP3ToMP4:
         final_video.write_videofile(self.video_path_name, fps=60, codec="libx264")
         print("video has been combined with audio")
 
-folder_path = r"[base path for temp files]"
-audio_path = r"[path for mp3]"
-video_path_name = r"[path for mp4]" + f"\{video_name}.mp4" 
-MP3ToMP4(folder_path, audio_path, video_path_name)
-
+if __name__ == '__main__':
+    resp = api.send_message(prompt) #pulls data from response into a dictionary
+    api.reset_conversation()
+    api.clear_conversations()
+    api.refresh_chat_page()
+    response_string = resp["message"] #pulls response string from resp dictionary
+    
+    #converts chatGPT response string with pyttsx3 module to text-to-speech as an mp3 file
+    engine = pyttsx3.init()
+    engine.save_to_file(response_string, f"{video_name}.mp3")
+    engine.runAndWait()
+    
+    #MP3ToMP4 class object 
+    MP3ToMP4(folder_path, audio_path, video_path_name)
+    
